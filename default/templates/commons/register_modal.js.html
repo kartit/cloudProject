@@ -1,0 +1,58 @@
+<script>
+
+    $('#register-button').click(function () {
+        var email = $('#user_email').val();
+        var name = $('#name').val();
+        var password = $('#password').val();
+        console.log(email);
+        var register_button = $('#register-btn-msg');
+        register_button.html('Registering......');
+
+        var register_btn_load = $('#register-btn-load');
+        register_btn_load.removeClass('fa-arrow-right').addClass(' fa-cog fa-spin');
+           $.ajax({
+               type: "POST",
+               url: "/register",
+               cache: true,
+                   data: {
+                   email: email,
+                   name: name,
+                   password: password
+
+               },
+               success: function (response) {
+                   console.log(response);
+                   register_button.hide()
+
+                   $('.modal-body').html(response['html']);
+               },
+               error: function (response) {
+                   try {
+                       console.log(response);
+                       var ajax_errors = $('#ajax-errors');
+                       var title = response.responseJSON ['title'];
+                       var message = response.responseJSON ['message'];
+                       console.log(title);
+                       ajax_errors.css('display', 'block');
+                       ajax_errors.find('strong').html(title);
+                       ajax_errors.find('span').html(message);
+                   }
+                   catch (e) {
+                       if (e) {
+
+                       }
+                   }
+               },
+               complete: function () {
+                   //register_button.html('Register');
+
+                   register_btn_load.removeClass(' fa-cog fa-spin');
+
+
+               }
+           })
+
+    })
+
+
+</script>

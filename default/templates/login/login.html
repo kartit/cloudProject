@@ -1,0 +1,43 @@
+{% extends "main.html" %}
+{% block title %}Log into your account{% endblock %}
+{% block content %}
+    <div id="fb-root"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-3">
+                <h2 style="color: #c7ddef">Login</h2>
+            </div>
+        </div>
+        <div class="row">
+            <form class="form-horizontal" action="/login" method="post">
+                <div class="form-group">
+                    <label for="email" class=" col-lg-2 col-lg-offset-1 control-label" style="color: #c7ddef">Email</label>
+                    <div class="col-lg-4">
+                        <input type="email" class="form-control" name="email" placeholder="Email id">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="password" class=" col-lg-2 col-lg-offset-1 control-label" style="color: #c7ddef">Password</label>
+                    <div class="col-lg-4">
+                        <input type="password" class="form-control" name="password" placeholder="Enter your Password">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-lg-offset-4 col-lg-10">
+                        <button type="submit" class="btn btn-primary">Sign In</button>
+{#
+                        <div class="fb-login-button" data-max-rows="1" data-size="large" data-show-faces="false"
+                             data-auto-logout-link="true"></div>#}
+
+                </div>
+
+
+                </div>
+
+
+            </form>
+        </div>
+    </div>
+
+
+{% endblock %}

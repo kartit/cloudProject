@@ -1,0 +1,122 @@
+{% extends"main.html" %}
+{% block title %}Donations given {{ query }}{% endblock %}
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <h2 style="color: #c7ddef"> Donations given in {{ query }}</h2>
+        </div>
+
+        {% for donations in donation %}
+
+            <div class="snpt col-lg-3 col-lg-offset-1">
+                <div class="snpt-img">
+                    <a href="/donation/{{ donations.doc_id }}" class="img-container">
+                        <img src="{{ donations.photo_url[0].value }}" style="width: 75%;height:75%">
+                    </a>
+                </div>
+                <div class="snpt-title">
+                    <a href="/donation/{{ donations.doc_id }}">
+                        {{ donations.title[0].value }}
+                    </a>
+                </div>
+                <div class="">
+                    <a href="/donation/{{ donations.doc_id }}">
+                        {{ donations.expressions[0].value }}
+                    </a>
+                </div>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <script>
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: '#################', // Set YOUR APP ID
+                //  channelUrl: 'http://hayageek.com/examples/oauth/facebook/oauth-javascript/channel.html', // Channel File
+                status: true, // check login status
+                cookie: true, // enable cookies to allow the server to access the session
+                xfbml: true  // parse XFBML
+            });
+
+            FB.Event.subscribe('auth.authResponseChange', function (response) {
+                if (response.status === 'connected') {
+                    document.getElementById("message").innerHTML += "<br>Connected to Facebook";
+                    //SUCCESS
+
+                }
+                else if (response.status === 'not_authorized') {
+                    document.getElementById("message").innerHTML += "<br>Failed to Connect";
+
+                    //FAILED
+                } else {
+                    document.getElementById("message").innerHTML += "<br>Logged Out";
+
+                    //UNKNOWN ERROR
+                }
+            });
+
+        };
+
+        function Login() {
+
+            FB.login(function (response) {
+                if (response.authResponse) {
+                    getUserInfo();
+                } else {
+                    console.log('User cancelled login or did not fully authorize.');
+                }
+            }, {scope: 'email,user_photos,user_videos'});
+
+        }
+
+        function getUserInfo() {
+            FB.api('/me', function (response) {
+
+                var str = "<b>Name</b> : " + response.name + "<br>";
+                str += "<b>Link: </b>" + response.link + "<br>";
+                str += "<b>Username:</b> " + response.username + "<br>";
+                str += "<b>id: </b>" + response.id + "<br>";
+                str += "<b>Email:</b> " + response.email + "<br>";
+                str += "<input type='button' value='Get Photo' onclick='getPhoto();'/>";
+                str += "<input type='button' value='Logout' onclick='Logout();'/>";
+                document.getElementById("status").innerHTML = str;
+
+            });
+        }
+        function getPhoto() {
+            FB.api('/me/picture?type=normal', function (response) {
+
+                var str = "<br/><b>Pic</b> : <img src='" + response.data.url + "'/>";
+                document.getElementById("status").innerHTML += str;
+
+            });
+
+        }
+        function Logout() {
+            FB.logout(function () {
+                document.location.reload();
+            });
+        }
+
+        // Load the SDK asynchronously
+        (function (d) {
+            var js, id = 'facebook-jssdk', ref = d.getElementsByTagName('script')[0];
+            if (d.getElementById(id)) {
+                return;
+            }
+            js = d.createElement('script');
+            js.id = id;
+            js.async = true;
+            js.src = "//connect.facebook.net/en_US/all.js";
+            ref.parentNode.insertBefore(js, ref);
+        }(document, 'script', 'facebook-jssdk'));
+
+    </script>
+    <div
+            class="fb-like"
+            data-share="true"
+            data-width="450"
+            data-show-faces="true">
+    </div>
+{% endblock %}
